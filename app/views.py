@@ -1,23 +1,32 @@
 from flask import render_template, request
-from models import Log
+from models import Besticons, Log, Besticons
 import os
 from datetime import date
 import warnings
+
 warnings.filterwarnings("ignore")
 
 
 def index():
     if request.method == 'POST':
-        return "got a post request"
+        query = str(request.form["url"])
+        if(query[-1] == "/"):
+            query = query[:-1]
+        faviconurl = query+"/favicon.ico"
+        return render_template("index.html", query=query, faviconurl=faviconurl)
 
-    return render_template("index.html", count=result_db_count())
+    return render_template("index.html", logcount=len(log_read()), besticoncount=len(besticons_read()))
 
 
 def docs():
     return render_template("docs.html")
 
 
-def db_add(result):
+def api():
+    return "<h1>API</h1>"
+
+
+def log_add(result):
 
     from app import db
     today = date.today()
@@ -27,18 +36,25 @@ def db_add(result):
     db.session.commit()
 
 
-def db_read():
+def log_read():
     from app import db
 
     all = Log.query.all()
     print(all)
+    return all
 
 
-def result_db_count():
+def besticons_read():
     from app import db
 
-    try:
-        all = Log.query.all()
-        return len(all)
-    except:
-        return "many"
+    all = Besticons.query.all()
+    print(all)
+    return all
+
+
+def besticons_add(url, iconurl):
+
+    from app import db
+    data = Besticons(url=url, iconurl=iconurl)
+    db.session.add(data)
+    db.session.commit()

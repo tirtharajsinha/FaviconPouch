@@ -8,12 +8,108 @@
     <link rel='stylesheet' href='https://www.w3schools.com/w3css/4/w3.css'>
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="shortcut icon" href="static/favicon.png" type="image/x-icon">
     <title>Home | FaviconPouch</title>
 </head>
 
 <body>
-    <h1>Home - {{ count }}</h1>
+    <div class="nav">
+        <div class="nav-start">
+            <img src="{{ url_for('static', filename='favicon.png') }}" alt="">
+            <a href="">FaviconPouch</a>
+        </div>
+        <div class="nav-mid">
+            <a href="#">FAQ</a>
+            <a href="#" class="tour">Tour</a>
+            <a href="/docs">Docs</a>
+        </div>
+        <div class="nav-end">
+            <a href="/api">API</a>
+            <i class="fa fa-bell-o"></i>
+            <button>Join</button>
+        </div>
+    </div>
 
+    <div class="container">
+        <div class="board">
+            <h1><span style="color:darkgray">Get</span> Favicon of any site for just<br>A <span
+                    style="color: chartreuse;">Click</span> or A API <span style="color:crimson;">Call</span>.</h1>
+        </div>
+        <form action="/" method="post" enctype="multipart/form-data"
+            class="neumorphic neumorphic--pressed variation2 pressed">
+            <input type="url" name="url" id="url" placeholder="Enter a URL" autofocus required>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <button type="submit" class="neumorphic variation2"><i class="fa fa-arrow-right"></i></button>
+        </form>
+
+
+        {% if faviconurl %}
+        <h3 style="color: rgb(100, 100, 100); text-align: center; margin-top: 60px;">Found fevicons for {{ query }}
+        </h3>
+        <div id="main-output">
+            <img src="{{ faviconurl }}" alt="" title="favicon preview">
+            <a href="{{ faviconurl }}" title="favicon url" id="finalurl">{{ faviconurl }}</a>
+            <i class="fa fa-copy" title="Copy" onclick="CopyToClipboard('finalurl')" id="copytarget"></i>
+            <span id="copydisp"></span>
+        </div>
+        {% endif %}
+
+
+
+
+        <ul class="otherlinks">
+            <h2 style="color: black; text-align: center; margin-top: 50px;">Others icons</h2>
+
+            <li class="otherlink">
+                <img src="https://google.com/favicon.ico" alt="" title="favicon preview">
+                <a href="https://google.com/favicon.ico" title="favicon url"
+                    id="finalurl">https://google.com/favicon.ico</a>
+            </li>
+            <li class="otherlink">
+                <img src="https://google.com/favicon.ico" alt="" title="favicon preview">
+                <a href="https://google.com/favicon.ico" title="favicon url"
+                    id="finalurl">https://google.com/favicon.ico</a>
+            </li>
+            <li class="otherlink">
+                <img src="https://google.com/favicon.ico" alt="" title="favicon preview">
+                <a href="https://google.com/favicon.ico" title="favicon url"
+                    id="finalurl">https://google.com/favicon.ico</a>
+            </li>
+        </ul>
+    </div>
+
+    <footer>
+
+    </footer>
+
+    <script>
+        function CopyToClipboard(id) {
+            var r = document.createRange();
+            r.selectNode(document.getElementById(id));
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(r);
+            document.execCommand('copy');
+            window.getSelection().removeAllRanges();
+            dispforsometime(10000, btnid = "copytarget", targetid = "copydisp", "Copied!")
+        }
+
+        function dispforsometime(dur = 5000, btnid, targetid, msg) {
+            document.getElementById(targetid).innerHTML = msg;
+            document.getElementById(targetid).style.display = "block";
+            document.getElementById(btnid).style.display = "none";
+
+
+            setTimeout(function () {
+                document.getElementById(targetid).innerHTML = '';
+                document.getElementById(targetid).style.display = "none";
+                document.getElementById(btnid).style.display = "block";
+            }, dur);
+        }
+
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script>
 </body>
 
 </html>
